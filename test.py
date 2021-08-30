@@ -1126,4 +1126,4 @@ api2.add_resource(TrendResource2, "/api2", methods=["GET", "POST"])
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    app.run(debug=True)
