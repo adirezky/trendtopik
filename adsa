@@ -1,0 +1,29 @@
+aniso8601==8.0.1
+click==7.1.1
+Flask==7.1.1
+Flask-Cors==3.0.10
+Flask-RESTful==0.3.9
+gunicorn==20.1.0
+itsdangerous==1.1.0
+Jinja2==2.11.1
+json5==0.9.5
+MarkupSafe==1.1.1
+matplotlib @ file:///C:/ci/matplotlib-suite_1613408055530/work
+nltk @ file:///tmp/build/80754af9/nltk_1618327084230/work
+numpy @ file:///C:/ci/numpy_and_numpy_base_1618497418457/work
+numpydoc @ file:///tmp/build/80754af9/numpydoc_1605117425582/work
+openpyxl @ file:///tmp/build/80754af9/openpyxl_1615411699337/work
+packaging @ file:///tmp/build/80754af9/packaging_1611952188834/work
+pandas @ file:///C:/ci/pandas_1618365634936/work
+PySastrawi==1.2.0
+PySocks @ file:///C:/ci/pysocks_1605287845585/work
+pytest==6.2.3
+python-dateutil @ file:///home/ktietz/src/ci/python-dateutil_1611928101742/work
+python-jsonrpc-server @ file:///tmp/build/80754af9/python-jsonrpc-server_1600278539111/work
+python-language-server @ file:///tmp/build/80754af9/python-language-server_1607972495879/work
+pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
+Sastrawi==1.0.1
+six @ file:///C:/ci/six_1605187374963/work
+sklearn==0.0
+virtualenv==20.7.2
+Werkzeug @ file:///home/ktietz/src/ci/werkzeug_1611932622770/work
