@@ -9,7 +9,6 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 import string
 import nltk
-import nltk
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from sklearn.feature_extraction.text import CountVectorizer
 nltk.download('stopwords')
