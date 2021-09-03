@@ -24,7 +24,7 @@ api = Api(app)
 class TrendResource(Resource):
     def get(self):
         wb = load_workbook(
-            filename='C:\\xampp\\htdocs\\start\\data-genap1819.xlsx')
+            filename='data-genap1819.xlsx')
         sheet_ranges = wb['peserta metopen']
         df = pd.DataFrame(sheet_ranges.values)
         da = df.dropna()
@@ -139,7 +139,7 @@ class TrendResource(Resource):
         da[['judul', 'topik']].to_excel("databersih.xlsx")
 
         databersih = pd.read_excel(
-            'C:\\xampp\\htdocs\\start\\databersih.xlsx')
+            'databersih.xlsx')
         databersih.shape
         databersih
 
@@ -417,7 +417,12 @@ class TrendResource(Resource):
             prob_WI_trend = prob_WI_trend * prob_WI[i]
         ##############################################
 
-        response = "adi"
+        response = [{"PS": prob_PS_trend, "FD": prob_FD_trend, "KK": prob_KK_trend, "SPK": prob_SPK_trend, "JK": prob_JK_trend, "ML": prob_ML_trend,
+                     "DM": prob_DM_trend, "AP": prob_AP_trend, "MP": prob_MP_trend, "PC": prob_PC_trend, "PBA": prob_PBA_trend, "IMK": prob_IMK_trend,
+                     "SP": prob_SP_trend, "M": prob_M_trend, "K": prob_K_trend, "G": prob_G_trend, "WI": prob_WI_trend,
+                     "popPS": intps, "popFD": intfd, "popKK": intkk, "popSPK": intspk, "popJK": intjk, "popML": intml, "popDM": intdm,
+                     "popAP": intap, "popMP": intmp, "popPC": intpc, "popPBA": intpba, "popIMK": intimk, "popSP": intsp, "popM": intm, "popK": intk,
+                     "popG": intg, "popWI": intwi}]
         return response
 
 
