@@ -912,4 +912,4 @@ api1.add_resource(TrendResource1, "/api1", methods=["GET", "POST"])
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5002)
+    app.run()
