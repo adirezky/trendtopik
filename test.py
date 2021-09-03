@@ -417,12 +417,7 @@ class TrendResource(Resource):
             prob_WI_trend = prob_WI_trend * prob_WI[i]
         ##############################################
 
-        response = [{"PS": prob_PS_trend, "FD": prob_FD_trend, "KK": prob_KK_trend, "SPK": prob_SPK_trend, "JK": prob_JK_trend, "ML": prob_ML_trend,
-                     "DM": prob_DM_trend, "AP": prob_AP_trend, "MP": prob_MP_trend, "PC": prob_PC_trend, "PBA": prob_PBA_trend, "IMK": prob_IMK_trend,
-                     "SP": prob_SP_trend, "M": prob_M_trend, "K": prob_K_trend, "G": prob_G_trend, "WI": prob_WI_trend,
-                     "popPS": intps, "popFD": intfd, "popKK": intkk, "popSPK": intspk, "popJK": intjk, "popML": intml, "popDM": intdm,
-                     "popAP": intap, "popMP": intmp, "popPC": intpc, "popPBA": intpba, "popIMK": intimk, "popSP": intsp, "popM": intm, "popK": intk,
-                     "popG": intg, "popWI": intwi}]
+        response = "adi"
         return response
 
 
