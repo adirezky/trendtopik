@@ -9,7 +9,6 @@ from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 import string
 import nltk
-import nltk
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 from sklearn.feature_extraction.text import CountVectorizer
 nltk.download('stopwords')
@@ -25,7 +24,7 @@ class TrendResource(Resource):
     def get(self):
         wb = load_workbook(
             filename='data-genap1819.xlsx')
-        sheet_ranges = wb['peserta metopen']
+        sheet_ranges = wb['Sheet1']
         df = pd.DataFrame(sheet_ranges.values)
         da = df.dropna()
         da = da.iloc[1:]
@@ -82,7 +81,9 @@ class TrendResource(Resource):
             return re.sub(r"\d+", "", text)
         da['judul'] = da['judul'].apply(remove_number)
 
-        
+        def remove_punctuaction(text):
+            return text.translate(str.maketrans("", "", string.punctuation))
+        da['judul'] = da['judul'].apply(remove_punctuaction)
 
         def remove_whitespace_LT(text):
             return text.strip()
@@ -417,7 +418,12 @@ class TrendResource(Resource):
             prob_WI_trend = prob_WI_trend * prob_WI[i]
         ##############################################
 
-        response = "adi"
+        response = [{"PS": prob_PS_trend, "FD": prob_FD_trend, "KK": prob_KK_trend, "SPK": prob_SPK_trend, "JK": prob_JK_trend, "ML": prob_ML_trend,
+                     "DM": prob_DM_trend, "AP": prob_AP_trend, "MP": prob_MP_trend, "PC": prob_PC_trend, "PBA": prob_PBA_trend, "IMK": prob_IMK_trend,
+                     "SP": prob_SP_trend, "M": prob_M_trend, "K": prob_K_trend, "G": prob_G_trend, "WI": prob_WI_trend,
+                     "popPS": intps, "popFD": intfd, "popKK": intkk, "popSPK": intspk, "popJK": intjk, "popML": intml, "popDM": intdm,
+                     "popAP": intap, "popMP": intmp, "popPC": intpc, "popPBA": intpba, "popIMK": intimk, "popSP": intsp, "popM": intm, "popK": intk,
+                     "popG": intg, "popWI": intwi}]
         return response
 
 
@@ -430,8 +436,124 @@ rekomentopik = {}
 
 class TrendResource1(Resource):
     def get(self):
+        wb = load_workbook(
+            filename='data-genap1819.xlsx')
+        sheet_ranges = wb['Sheet1']
+        df = pd.DataFrame(sheet_ranges.values)
+        da = df.dropna()
+        da = da.iloc[1:]
+        da.columns = ['judul', 'topik']
+        popPS = da['topik'].value_counts()['Pengembangan Software']
+        popFD = da['topik'].value_counts()['Forensik Digital']
+        popKK = da['topik'].value_counts()['Keamanan Komputer']
+        popSPK = da['topik'].value_counts()['Sistem Pendukung Keputusan']
+        popJK = da['topik'].value_counts()['Jaringan Komputer']
+        popML = da['topik'].value_counts()['Machine Learning']
+        popDM = da['topik'].value_counts()['Data Mining']
+        popAP = da['topik'].value_counts()['Algoritma Pencarian']
+        popMP = da['topik'].value_counts()['Media Pembelajaran']
+        popPC = da['topik'].value_counts()['Pengolahan Citra']
+        popPBA = da['topik'].value_counts()['Pengolahan Bahasa Alami']
+        popIMK = da['topik'].value_counts()['Interaksi Manusia dan Komputer']
+        popSP = da['topik'].value_counts()['Sistem Pakar']
+        popM = da['topik'].value_counts()['Multimedia']
+        popK = da['topik'].value_counts()['Kriptografi']
+        popG = da['topik'].value_counts()['Game']
+        popWI = da['topik'].value_counts()['Web Indexing']
+        array = [popPS, popFD, popKK, popSPK, popJK, popML, popDM, popAP,
+                 popMP, popPC, popPBA, popIMK, popSP, popM, popK, popG, popWI]
+        intps = int(array[0])
+        intfd = int(array[1])
+        intkk = int(array[2])
+        intspk = int(array[3])
+        intjk = int(array[4])
+        intml = int(array[5])
+        intdm = int(array[6])
+        intap = int(array[7])
+        intmp = int(array[8])
+        intpc = int(array[9])
+        intpba = int(array[10])
+        intimk = int(array[11])
+        intsp = int(array[12])
+        intm = int(array[13])
+        intk = int(array[14])
+        intg = int(array[15])
+        intwi = int(array[16])
+
+        da['judul'] = da['judul'].str.lower()
+
+        def remove(text):
+            text = text.replace('\\t', " ").replace(
+                '\\u', " ").replace('\\', "")
+            text = text.encode('ascii', 'replace').decode('ascii')
+            text = ' '.join(
+                re.sub("([@#][A-Za-z0-9]+)|(\w+:\/\/\S+)", " ", text).split())
+            return text.replace("http://", " ").replace("https://", " ")
+        da['judul'] = da['judul'].apply(remove)
+
+        def remove_number(text):
+            return re.sub(r"\d+", "", text)
+        da['judul'] = da['judul'].apply(remove_number)
+
+        def remove_punctuaction(text):
+            return text.translate(str.maketrans("", "", string.punctuation))
+        da['judul'] = da['judul'].apply(remove_punctuaction)
+
+        def remove_whitespace_LT(text):
+            return text.strip()
+        da['judul'] = da['judul'].apply(remove_whitespace_LT)
+
+        def remove_whitespace_multiple(text):
+            return re.sub('\s+', ' ', text)
+        da['judul'] = da['judul'].apply(remove_whitespace_multiple)
+
+        def remove_singl_char(text):
+            return re.sub(r"\b[a-zA-Z]\b", "", text)
+        da['judul'] = da['judul'].apply(remove_singl_char)
+
+        def word_tokenize_wrapper(text):
+            return word_tokenize(text)
+        da['judul'] = da['judul'].apply(word_tokenize_wrapper)
+
+        def stopword_removal(judul):
+            filtering = stopwords.words('indonesian', 'english')
+            x = []
+            data = []
+
+            def myfunc(x):
+                if x in filtering:
+                    return False
+                else:
+                    return True
+            fit = filter(myfunc, judul)
+            for x in fit:
+                data.append(x)
+            return data
+        da['judul'] = da['judul'].apply(stopword_removal)
+
+        factory = StemmerFactory()
+        stemmer = factory.create_stemmer()
+
+        def stemmed_wrapper(term):
+            return stemmer.stem(term)
+
+        term_dict = {}
+
+        for document in da['judul']:
+            for term in document:
+                if term not in term_dict:
+                    term_dict[term] = ' '
+
+        for term in term_dict:
+            term_dict[term] = stemmed_wrapper(term)
+
+        def get_stemmed_term(document):
+            return [term_dict[term] for term in document]
+        da['judul'] = da['judul'].apply(get_stemmed_term)
+
+        da[['judul', 'topik']].to_excel("databersih.xlsx")
         databersih = pd.read_excel(
-            'C:\\xampp\\htdocs\\start\\databersih.xlsx')
+            'databersih.xlsx')
         databersih.shape
         databersih
 
@@ -898,6 +1020,102 @@ class TrendResource1(Resource):
 
 api1.add_resource(TrendResource1, "/api1", methods=["GET", "POST"])
 
+api2 = Api(app)
+
+rekomentopik1 = {}
+
+
+class TrendResource2(Resource):
+    def get(self):
+
+        return rekomentopik1
+
+    def post(self):
+
+        hasil1 = {"status": "gagal"}
+        try:
+            data = request.json
+            nambahjudulexcel = data["nambahjudulexcel"]
+            nambahtopikexcel = data["nambahtopikexcel"]
+            rekomentopik1["nambahjudulexcel"] = nambahjudulexcel
+            rekomentopik1["nambahtopikexcel"] = nambahtopikexcel
+            wb = load_workbook(
+                filename='data-genap1819.xlsx')
+            sheet_ranges = wb['Sheet1']
+
+            df = pd.DataFrame(sheet_ranges.values)
+            da = df.dropna()
+            da = da.iloc[1:]
+            da.columns = ['judul', 'topik']
+            judulBefore = []
+            for dt in da['judul']:
+                judulBefore.append(''.join(dt))
+            topikBefore = []
+            for dt1 in da['topik']:
+                topikBefore.append(''.join(dt1))
+
+            judulnew = [nambahjudulexcel]
+            if nambahtopikexcel == '1':
+                topiknew = ['Pengembangan Sistem']
+            elif nambahtopikexcel == '2':
+                topiknew = ['Forensik Digital']
+            elif nambahtopikexcel == '3':
+                topiknew = ['Keamanan Komputer']
+            elif nambahtopikexcel == '4':
+                topiknew = ['Sistem Pendukung Keputusan']
+            elif nambahtopikexcel == '5':
+                topiknew = ['Jaringan Komputer']
+            elif nambahtopikexcel == '6':
+                topiknew = ['Machine Learning']
+            elif nambahtopikexcel == '7':
+                topiknew = ['Data Mining']
+            elif nambahtopikexcel == '8':
+                topiknew = ['Media Pembelajaran']
+            elif nambahtopikexcel == '9':
+                topiknew = ['Pengolahan Citra']
+            elif nambahtopikexcel == '10':
+                topiknew = ['Pengolahan Bahasa Alami']
+            elif nambahtopikexcel == '11':
+                topiknew = ['Intraksi Manusia dan Komputer']
+            elif nambahtopikexcel == '12':
+                topiknew = ['Sistem Pakar']
+            elif nambahtopikexcel == '13':
+                topiknew = ['Multimedia']
+            elif nambahtopikexcel == '14':
+                topiknew = ['Kriotografi']
+            elif nambahtopikexcel == '15':
+                topiknew = ['Game']
+            elif nambahtopikexcel == '16':
+                topiknew = ['Web Indexing']
+            else:
+                topiknew = ['Tidak ada']
+
+            data = [[judulnew, topiknew]]
+            newDataframe = pd.DataFrame(data, columns=['judul', 'topik'])
+            rowsJudulNew = []
+            for d in newDataframe['judul']:
+                rowsJudulNew.append(''.join(d))
+            rowsTopikNew = []
+            for d1 in newDataframe['topik']:
+                rowsTopikNew.append(''.join(d1))
+            for row in rowsJudulNew:
+                judulBefore.append(''.join(row))
+            for row1 in rowsTopikNew:
+                topikBefore.append(''.join(row1))
+            latestDataframe = pd.DataFrame(columns=['judul', 'topik'])
+            latestDataframe['judul'] = judulBefore
+            latestDataframe['topik'] = topikBefore
+            latestDataframe.to_excel(
+                'data-genap1819.xlsx', engine='xlsxwriter', index=False)
+            hasil1 = {"status": "berhasil"}
+        except Exception as e:
+            print("Erorr : " + str(e))
+
+        return jsonify(hasil1)
+
+
+api2.add_resource(TrendResource2, "/api2", methods=["GET", "POST"])
+
 
 # def casefolding(judul):
 #     judul = judul.lower()
@@ -907,4 +1125,4 @@ api1.add_resource(TrendResource1, "/api1", methods=["GET", "POST"])
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
