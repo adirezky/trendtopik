@@ -418,7 +418,7 @@ class TrendResource(Resource):
             prob_WI_trend = prob_WI_trend * prob_WI[i]
         ##############################################
 
-        response = "adi"
+        response = intps
         return response
 
 
